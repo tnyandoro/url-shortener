@@ -1,1 +1,54 @@
-# url-shortener
+# URL Shortening Service
+
+## Overview
+This Node.js application provides a basic URL shortening service, allowing users to submit long URLs and receive shortened versions that redirect to the original URLs.
+
+## Features
+1. **Shortening URLs**: Users can submit a long URL to be shortened.
+2. **Redirection**: Shortened URLs redirect users to the original URLs.
+3. **Simple API**: The service exposes simple endpoints for URL submission and redirection.
+4. **Unique Short IDs**: Shortened URLs are generated using unique, random 7-character IDs.
+5. **In-Memory Storage**: URL mappings are stored in-memory for simplicity.
+
+## Technologies Used
+- **Node.js**: A JavaScript runtime for executing server-side code.
+- **Express.js**: A minimal and flexible Node.js web application framework for building APIs.
+- **nanoid**: A small, secure, URL-friendly unique ID generator used for generating short IDs.
+- **body-parser**: Middleware for parsing request bodies.
+
+## Implementation
+- **POST /shorten Endpoint**: Allows users to submit a URL to be shortened. Responds with a shortened URL.
+- **GET /:shortId Endpoint**: Redirects users from a shortened URL to the original URL.
+- **In-Memory Storage**: URL mappings are stored in a JavaScript object (`urlDatabase`).
+
+## Usage
+1. Install Node.js and dependencies (`express`, `body-parser`, `nanoid`).
+2. Run the Node.js application.
+3. Send POST requests to `/shorten` with a JSON payload containing the original URL.
+4. Receive a shortened URL in the response.
+5. Use the shortened URL to redirect to the original URL.
+
+## Example
+- **Request**:
+  ```json
+  POST /shorten
+  {
+    "url": "https://example.com/very-long-url-to-be-shortened"
+  }
+
+## Authors
+
+👤 **Author1**
+
+- GitHub: [@Tendai Nyandoro](https://github.com/tnyandoro)
+- Twitter: [@tendai28](https://twitter.com/tendai28)
+- LinkedIn: [Tendai Nyandoro](https://www.linkedin.com/in/tendai-nyandoro-a8060826/)
+
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+Feel free to check the [issues page](https://github.com/tnyandoro/url-shortener).
+
+## Show your support
