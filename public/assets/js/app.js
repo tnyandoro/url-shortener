@@ -75,8 +75,19 @@ function App() {
 
     return (
         <div className="container mt-5">
-            <h1 className="mb-3">URL Manager</h1>
-
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <h1>URL Manager</h1>
+                <button
+                    className="btn btn-success"
+                    onClick={() => {
+                        setModalOpen(true);
+                        setEditURL(null);
+                    }}
+                >
+                    Add URL
+                </button>
+            </div>
+    
             <table className="table">
                 <thead>
                     <tr>
@@ -93,49 +104,103 @@ function App() {
                             <td>{url.url}</td>
                             <td>{url.shortUrl}</td>
                             <td>
-                                <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(url)}>Edit</button>
-                                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(url.id)}>Delete</button>
+                                <button
+                                    className="btn btn-primary btn-sm me-2"
+                                    onClick={() => handleEdit(url)}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() => handleDelete(url.id)}
+                                >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-
+    
             <nav>
                 <ul className="pagination">
                     {Array.from({ length: totalPages }).map((_, index) => (
-                        <li key={index} className={`page-item ${currentPage === index ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(index)}>
+                        <li
+                            key={index}
+                            className={`page-item ${currentPage === index ? 'active' : ''}`}
+                        >
+                            <button
+                                className="page-link"
+                                onClick={() => handlePageChange(index)}
+                            >
                                 {index + 1}
                             </button>
                         </li>
                     ))}
                 </ul>
             </nav>
-
-            <button className="btn btn-success" onClick={() => { setModalOpen(true); setEditURL(null); }}>Add URL</button>
-
-            <div className={`modal fade ${modalOpen ? 'show' : ''}`} tabIndex="-1" role="dialog" style={{ display: modalOpen ? 'block' : 'none' }}>
+    
+            <div
+                className={`modal fade ${modalOpen ? 'show' : ''}`}
+                tabIndex="-1"
+                role="dialog"
+                style={{ display: modalOpen ? 'block' : 'none' }}
+            >
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title">{editURL ? 'Edit URL' : 'Add URL'}</h5>
-                            <button type="button" className="btn-close" onClick={handleModalClose} aria-label="Close"></button>
+                            <h5 className="modal-title">
+                                {editURL ? 'Edit URL' : 'Add URL'}
+                            </h5>
+                            <button
+                                type="button"
+                                className="btn-close"
+                                onClick={handleModalClose}
+                                aria-label="Close"
+                            ></button>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="modal-body">
                                 <div className="mb-3">
-                                    <label htmlFor="name" className="form-label">Name</label>
-                                    <input type="text" className="form-control" id="name" name="name" value={newURL.name} onChange={handleInputChange} required />
+                                    <label htmlFor="name" className="form-label">
+                                        Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="name"
+                                        name="name"
+                                        value={newURL.name}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
                                 </div>
                                 <div className="mb-3">
-                                    <label htmlFor="url" className="form-label">URL</label>
-                                    <input type="url" className="form-control" id="url" name="url" value={newURL.url} onChange={handleInputChange} required />
+                                    <label htmlFor="url" className="form-label">
+                                        URL
+                                    </label>
+                                    <input
+                                        type="url"
+                                        className="form-control"
+                                        id="url"
+                                        name="url"
+                                        value={newURL.url}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={handleModalClose}>Close</button>
-                                <button type="submit" className="btn btn-primary">{editURL ? 'Save Changes' : 'Add URL'}</button>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={handleModalClose}
+                                >
+                                    Close
+                                </button>
+                                <button type="submit" className="btn btn-primary">
+                                    {editURL ? 'Save Changes' : 'Add URL'}
+                                </button>
                             </div>
                         </form>
                     </div>
