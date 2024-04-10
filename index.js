@@ -142,7 +142,14 @@ app.get('/urls', (req, res) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.json(rows);
+        res.json({
+            items: rows.map(row => {
+                row.shortUrl = `${BASE_URL}/${base62.encode(row.id)}`;
+                return row;
+            }),
+            page: page,
+            size: size,
+        });
     });
 });
 

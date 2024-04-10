@@ -16,8 +16,8 @@ This Node.js application provides a basic URL shortening service, allowing users
 
 - **Node.js**: A JavaScript runtime for executing server-side code.
 - **Express.js**: A minimal and flexible Node.js web application framework for building APIs.
-- **nanoid**: A small, secure, URL-friendly unique ID generator used for generating short IDs.
 - **body-parser**: Middleware for parsing request bodies.
+- **react.js**: A Javascript Frontend framework 
 
 ## Implementation
 
