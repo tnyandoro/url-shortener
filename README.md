@@ -1,5 +1,6 @@
 # URL Shortening Service
 
+<img width="1440" alt="Screenshot 2024-04-14 at 14 20 02" src="https://github.com/tnyandoro/url-shortener/assets/30318155/33d1b697-accd-4e9b-a30e-ae811efb147c">
 
 
 ## Overview
