@@ -2,7 +2,6 @@
 
 <img width="1440" alt="Screenshot 2024-04-14 at 14 20 02" src="https://github.com/tnyandoro/url-shortener/assets/30318155/33d1b697-accd-4e9b-a30e-ae811efb147c">
 
-
 ## Overview
 
 This Node.js application provides a basic URL shortening service, allowing users to submit long URLs and receive shortened versions that redirect to the original URLs.
@@ -20,7 +19,7 @@ This Node.js application provides a basic URL shortening service, allowing users
 - **Node.js**: A JavaScript runtime for executing server-side code.
 - **Express.js**: A minimal and flexible Node.js web application framework for building APIs.
 - **body-parser**: Middleware for parsing request bodies.
-- **react.js**: A Javascript Frontend framework 
+- **react.js**: A Javascript Frontend framework
 
 ## Implementation
 
@@ -68,4 +67,3 @@ This Node.js application provides a basic URL shortening service, allowing users
 Contributions, issues, and feature requests are welcome!
 
 Feel free to check the [issues page](https://github.com/tnyandoro/url-shortener).
-
