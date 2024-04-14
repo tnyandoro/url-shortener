@@ -1,5 +1,7 @@
 # URL Shortening Service
 
+
+
 ## Overview
 
 This Node.js application provides a basic URL shortening service, allowing users to submit long URLs and receive shortened versions that redirect to the original URLs.
@@ -36,9 +38,11 @@ This Node.js application provides a basic URL shortening service, allowing users
 
 1. Install Node.js and dependencies just run npm install to install (`express`, `body-parser`, `express-validator`, `sqlite3`, `valid-url`).
 2. Run the Node.js application.
-3. Send POST requests to `/shorten` with a JSON payload containing the original URL.
-4. Receive a shortened URL in the response.
-5. Use the shortened URL to redirect to the original URL.
+3. To start the app type `npm start`
+4. Send POST requests to `/shorten` with a JSON payload containing the original URL.
+5. Receive a shortened URL in the response.
+6. Use the shortened URL to redirect to the original URL.
+7. To run tests on the app type `npm test`
 
 ## Example
 
