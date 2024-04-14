@@ -1,14 +1,14 @@
-const useState = React.useState;
-const useEffect = React.useEffect;
+const { useState, useEffect } = React;
 //import React, { useState, useEffect } from 'react';
-//import axios from 'axios';
 
 function App() {
 
     const [urls, setUrls] = useState([]);
-    const [pageSize, setPageSize] = useState(10);
+    const [error, setError] = useState(null);
+    const [pageSize, setPageSize] = useState(5);
     const [totalPages, setTotalPages] = useState(1);
     const [currentURL, setCurrentURL] = useState({});
+    const [searchText, setSearchText] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [formModalOpen, setFormModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -19,17 +19,31 @@ function App() {
 
     const loadURLs = async () => {
         try {
-            const response = await axios.get(`/urls?page=${currentPage}&size=${pageSize}`);
-            const { items, page, size } = response.data;
+
+            const encodedSearchText = encodeURIComponent(searchText || '');
+            const response = await axios.get(`/urls?page=${currentPage}&size=${pageSize}&search=${encodedSearchText}`);
+            const { items, count } = response.data;
+
             setUrls(items);
-            setTotalPages(Math.ceil(size / 10)); // Calculate total pages
+            setTotalPages(Math.ceil(count / pageSize));
+
         } catch (error) {
-            console.error('Error fetching URLs:', error);
+
+            error.title = 'Load Error';
+            setError(error);
+
         }
     };
 
+    const handleSearch = async (reset) => {
+        if (reset) {
+            setSearchText('');
+        }
+        await loadURLs();
+    };
+
     const handleAdd = () => {
-        setCurrentURL({...{ id: null, name: null, url: null }});
+        setCurrentURL({ id: 0, name: '', url: 'https://' });
         setFormModalOpen(true);
     };
 
@@ -57,32 +71,49 @@ function App() {
         setCurrentURL({});
     };
 
-    const handleInputChange = (e) => {
+    const handleFormChange = (e) => {
         const { name, value } = e.target;
         setCurrentURL({ ...currentURL, [name]: value });
     };
 
+    const handleSearchChange = (e) => {
+        const { name, value } = e.target;
+        setSearchText(value);
+    };
+
     const handleSaveSubmission = async () => {
         try {
+
             if (currentURL?.id) {
                 await axios.put(`/urls/${currentURL.id}`, currentURL);
             } else {
                 await axios.post('/urls', currentURL);
             }
+
             loadURLs();
             handleFormModalClose();
+
         } catch (error) {
-            console.error('Error submitting URL:', error);
+
+            error.title = 'Save Error';
+            setError(error);
+
         }
     };
 
     const handleDeleteSubmission = async () => {
         try {
+
             await axios.delete(`/urls/${currentURL.id}`);
+
             loadURLs();
             handleDeleteModalClose();
+
         } catch (error) {
-            console.error('Error deleting URL:', error);
+
+            error.title = 'Delete Error';
+            setError(error);
+
         }
     };
 
@@ -90,14 +121,46 @@ function App() {
         <>
             <div className="container mt-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h1>URL Shortener</h1>
+                    <h1
+                        >URL Shortener
+                    </h1>
                     <button
-                        className="btn btn-success"
+                        className="btn btn-success btn-sm btn-100"
                         onClick={handleAdd}
                     >
-                        <i className="bi bi-plus"></i> Add
+                        <i className="bi bi-plus-lg me-1"></i> Add
                     </button>
-                </div>    
+                </div>
+                <div className="d-flex align-items-center mb-3">
+                    <div className="col-6 me-2">
+                        <div className="input-group">
+                            <input
+                                id="search"
+                                type="text"
+                                name="search"
+                                className="form-control form-control-sm"
+                                onChange={handleSearchChange}
+                                value={searchText}
+                            />
+                            {/* <button
+                                className="btn btn-outline-secondary btn-sm"
+                                type="button"
+                                onClick={() => handleSearch(true)}
+                                style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0' }}
+                            >
+                                &times;
+                            </button> */}
+                        </div>
+                    </div>
+                    
+                    <button
+                        className="btn btn-primary btn-sm btn-100"
+                        onClick={() => handleSearch(false)}
+                    >
+                        <i className="bi bi-search me-1"></i> Search
+                    </button>
+                    
+                </div>
                 <table className="table">
                     <thead>
                         <tr>
@@ -108,7 +171,7 @@ function App() {
                         </tr>
                     </thead>
                     <tbody>
-                        {urls.map((url) => (
+                        {urls.map(url => (
                             <tr key={url.id}>
                                 <td>{url.name}</td>
                                 <td>
@@ -129,17 +192,17 @@ function App() {
                                 </td>
                                 <td className="text-end">
                                     <button
-                                        className="btn btn-primary btn-sm me-2"
+                                        className="btn btn-primary btn-sm me-2 btn-100"
                                         onClick={() => handleEdit(url)}
                                     >
-                                        <i className="bi bi-pencil"></i>
+                                        <i className="bi bi-pencil me-1"></i>
                                         Edit
                                     </button>
                                     <button
-                                        className="btn btn-danger btn-sm"
+                                        className="btn btn-danger btn-sm btn-100"
                                         onClick={() => handleDelete(url)}
                                     >
-                                        <i className="bi bi-trash"></i>
+                                        <i className="bi bi-trash me-1"></i>
                                         Delete
                                     </button>
                                 </td>
@@ -147,7 +210,7 @@ function App() {
                         ))}
                     </tbody>
                 </table>
-        
+
                 <nav>
                     <ul className="pagination">
                         {Array.from({ length: totalPages }).map((_, index) => (
@@ -170,8 +233,9 @@ function App() {
                     className={`modal fade ${deleteModalOpen ? 'show' : ''}`}
                     tabIndex="-1"
                     role="dialog"
-                    aria-hidden={!formModalOpen}
+                    aria-hidden={!deleteModalOpen}
                     style={{ display: deleteModalOpen ? 'block' : 'none' }}
+                    data-backdrop="true" 
                 >
                     <div className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">
@@ -192,14 +256,14 @@ function App() {
                             <div className="modal-footer">
                                 <button
                                     type="button"
-                                    className="btn btn-secondary"
+                                    className="btn btn-secondary btn-sm btn-100"
                                     onClick={handleDeleteModalClose}
                                 >
                                     No, Cancel
                                 </button>
                                 <button 
                                     type="submit" 
-                                    className="btn btn-danger"
+                                    className="btn btn-danger btn-sm btn-100"
                                     onClick={handleDeleteSubmission}
                                 >
                                     Yes, Delete
@@ -213,9 +277,11 @@ function App() {
                     className={`modal fade ${formModalOpen ? 'show' : ''}`}
                     tabIndex="-1"
                     role="dialog"
+                    aria-hidden={!formModalOpen}
                     style={{ display: formModalOpen ? 'block' : 'none' }}
+                    data-backdrop="true" 
                 >
-                    <div className="modal-dialog" role="document">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">
@@ -235,11 +301,11 @@ function App() {
                                     </label>
                                     <input
                                         type="text"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         id="name"
                                         name="name"
                                         value={currentURL.name}
-                                        onChange={handleInputChange}
+                                        onChange={handleFormChange}
                                         required
                                     />
                                 </div>
@@ -249,11 +315,11 @@ function App() {
                                     </label>
                                     <input
                                         type="url"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         id="url"
                                         name="url"
                                         value={currentURL.url}
-                                        onChange={handleInputChange}
+                                        onChange={handleFormChange}
                                         required
                                     />
                                 </div>
@@ -261,14 +327,14 @@ function App() {
                             <div className="modal-footer">
                                 <button
                                     type="button"
-                                    className="btn btn-secondary"
+                                    className="btn btn-secondary btn-sm btn-100"
                                     onClick={handleFormModalClose}
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="btn btn-primary"
+                                    className="btn btn-primary btn-sm btn-100"
                                     onClick={handleSaveSubmission}
                                 >
                                     Save
@@ -277,8 +343,49 @@ function App() {
                         </div>
                     </div>
                 </div>
+
+                <div
+                    className={`modal fade ${error ? 'show' : ''}`}
+                    tabIndex="-1"
+                    role="dialog"
+                    aria-hidden={!error}
+                    style={{ display: error ? 'block' : 'none' }}
+                    data-backdrop="true" 
+                >
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">
+                                    {error?.title || 'Error'}
+                                </h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={() => setError(null)}
+                                    aria-label="Close"
+                                ></button>
+                            </div>
+                            <div className="modal-body">
+                                <ul class="list-group list-group-flush">
+                                    {(error?.response?.data?.errors || [error?.message || 'Unknown error']).map(e => (
+                                        <li class="list-group-item">{e.msg}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-primary btn-sm btn-100"
+                                    onClick={() => setError(null)}
+                                >
+                                    OK
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            
         </>
     );
 }
