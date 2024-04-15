@@ -50,12 +50,37 @@ Here's how the base62 function is working in the context of a URL shortening app
 
 ## Usage
 
-1. Install Node.js and dependencies just run npm install to install (`express`, `body-parser`, `express-validator`, `sqlite3`, `valid-url`).
-2. Run the Node.js application.
-3. To start the app type `npm start`
-4. Send POST requests to `/shorten` with a JSON payload containing the original URL.
-5. Receive a shortened URL in the response.
-6. Use the shortened URL to redirect to the original URL.
+1. **Clone or download the repository**:
+
+   ```shell
+   git clone https://github.com/tnyandoro/url-shortener
+   ```
+
+2. **Change directory into the `url-shortener` folder**:
+
+   ```shell
+   cd url-shortener
+   ```
+
+3. **Install the dependencies**:
+
+   ```shell
+   npm install
+   ```
+
+   Install Node.js and dependencies just run npm install to install (`express`, `body-parser`, `express-validator`, `sqlite3`, `valid-url`).
+
+4. **Run the application**:
+
+   ```shell
+   npm run
+   ```
+
+5. **Use the application**:
+   - Go to [localhost:3000](http://localhost:3000) to use the app.
+   - Click the "Add" button to add a new URL.
+   - You can edit or delete URLs as needed.
+6. Run the Node.js application.
 7. To run tests on the app type `npm test`
 
 ## Example
