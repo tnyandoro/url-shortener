@@ -6,6 +6,20 @@
 
 This Node.js application provides a basic URL shortening service, allowing users to submit long URLs and receive shortened versions that redirect to the original URLs.
 
+## How its working 
+
+Here's how the base62 function is working in the context of a URL shortening application:
+
+- **Encoding**:
+  - When a new URL is added to the database, the application generates a unique integer ID for the URL.
+  - This ID is then converted to a base62 string using the `base62.encode(id)` function.
+  - The resulting base62 string is used as the "short URL" that will be displayed to the user.
+
+- **Decoding**:
+  - When a user accesses the short URL (e.g., `http://localhost:3000/ab12cd`), the application needs to determine the original URL that corresponds to the short URL.
+  - The base62 string in the URL is decoded back to the original integer ID using the `base62.decode(shortUrl)` function.
+  - The application then uses this ID to retrieve the corresponding URL from the database.
+
 ## Features
 
 1. **Shortening URLs**: Users can submit a long URL to be shortened.
