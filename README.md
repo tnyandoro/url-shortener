@@ -73,7 +73,7 @@ Here's how the base62 function is working in the context of a URL shortening app
 4. **Run the application**:
 
    ```shell
-   npm run
+   npm start
    ```
 
 5. **Use the application**:
